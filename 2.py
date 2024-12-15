@@ -7,14 +7,19 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-# Tentukan lokasi ChromeDriver secara manual
-chrome_driver_path = r"C:\path\to\chromedriver.exe"  # Sesuaikan dengan path yang benar
-
+# Menggunakan WebDriver Manager untuk secara otomatis mengunduh ChromeDriver yang sesuai
 chrome_options = Options()
 chrome_options.add_argument("--headless")  # Menjalankan di background tanpa membuka browser
 
-# Gunakan webdriver dengan path ChromeDriver yang sudah disesuaikan
-driver = webdriver.Chrome(service=Service(chrome_driver_path), options=chrome_options)
+# Mendapatkan ChromeDriver otomatis menggunakan WebDriver Manager
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+
+# Gunakan driver untuk mengakses halaman atau melakukan interaksi
+driver.get("https://www.google.com")
+print(driver.title)
+
+# Menutup browser setelah selesai
+driver.quit()
 
 
 # Fungsi untuk menghasilkan string acak (username dan password)
