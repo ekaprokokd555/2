@@ -5,22 +5,11 @@ import csv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-
-# Menggunakan WebDriver Manager untuk secara otomatis mengunduh ChromeDriver yang sesuai
-chrome_options = Options()
-chrome_options.add_argument("--headless")  # Menjalankan di background tanpa membuka browser
-
-# Mendapatkan ChromeDriver otomatis menggunakan WebDriver Manager
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-
-# Gunakan driver untuk mengakses halaman atau melakukan interaksi
-driver.get("https://www.google.com")
-print(driver.title)
-
-# Menutup browser setelah selesai
-driver.quit()
-
 
 # Fungsi untuk menghasilkan string acak (username dan password)
 def generate_random_string(length=8):
@@ -31,8 +20,8 @@ def generate_random_string(length=8):
 def create_outlook_account(driver):
     driver.get("https://signup.live.com/")
 
-    # Tunggu beberapa detik agar halaman dimuat
-    time.sleep(2)
+    # Tunggu beberapa detik agar halaman dimuat (gunakan WebDriverWait untuk menunggu elemen)
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "loginfmt")))
 
     # Membuat username acak
     username = generate_random_string(10) + "@outlook.com"
@@ -43,30 +32,30 @@ def create_outlook_account(driver):
     email_field.send_keys(username)
     email_field.send_keys(Keys.RETURN)
 
-    time.sleep(2)
+    # Tunggu halaman berikutnya muncul
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "idSIButton9")))
 
     # Klik tombol Next untuk password
     next_button = driver.find_element(By.ID, "idSIButton9")
     next_button.click()
-    
-    time.sleep(2)
+
+    # Tunggu beberapa detik agar elemen muncul
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "passwd")))
 
     # Isi password
     password_field = driver.find_element(By.NAME, "passwd")
     password_field.send_keys(password)
 
-    time.sleep(2)
-
     # Klik tombol Sign in
     sign_in_button = driver.find_element(By.ID, "idSIButton9")
     sign_in_button.click()
 
-    time.sleep(2)
+    # Tunggu beberapa detik agar proses selesai
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "idSIButton9")))
 
     # Klik Yes untuk menyimpan info login (jika ada)
     try:
-        driver.find_element(By.ID, "idSIButton9").click()
-        time.sleep(2)
+        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "idSIButton9"))).click()
     except:
         pass  # Jika tombol tidak ada, lanjutkan
 
