@@ -3,11 +3,19 @@ import string
 import time
 import csv
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+
+# Tentukan lokasi ChromeDriver secara manual
+chrome_driver_path = r"C:\path\to\chromedriver.exe"  # Sesuaikan dengan path yang benar
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")  # Menjalankan di background tanpa membuka browser
+
+# Gunakan webdriver dengan path ChromeDriver yang sudah disesuaikan
+driver = webdriver.Chrome(service=Service(chrome_driver_path), options=chrome_options)
+
 
 # Fungsi untuk menghasilkan string acak (username dan password)
 def generate_random_string(length=8):
