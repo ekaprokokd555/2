@@ -5,9 +5,9 @@ import csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.edge.service import Service
+from selenium.webdriver.edge.options import Options
+from webdriver_manager.microsoft import EdgeDriverManager
 
 # Fungsi untuk menghasilkan string acak (username dan password)
 def generate_random_string(length=8):
@@ -62,15 +62,15 @@ def create_outlook_account(driver):
 
 # Fungsi utama untuk membuat beberapa akun
 def create_bulk_accounts(num_accounts=5):
-    # Menyiapkan WebDriver untuk Chrome
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Jalankan di background (tanpa UI)
+    # Menyiapkan WebDriver untuk Microsoft Edge
+    edge_options = Options()
+    edge_options.add_argument("--headless")  # Jalankan di background (tanpa UI)
     
-    # Menyiapkan WebDriver dengan ChromeDriver
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    # Menyiapkan WebDriver dengan EdgeDriver versi terbaru
+    driver = webdriver.Edge(service=Service(EdgeDriverManager().install()), options=edge_options)
 
     # Membuka file untuk menyimpan hasil
-    with open("outlook_accounts.csv", mode='w', newline='') as file:
+    with open("outlook_accounts_edge.csv", mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Password"])  # Menulis header file CSV
 
